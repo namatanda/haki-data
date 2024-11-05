@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "haki-data"
+version = "0.1.0"
+description = "A tool for analyzing court case data"
+authors = ["namatanda <mwagichimu@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+openpyxl = "^3.1.5"
+pandas = "^2.2.3"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2.5" 
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.29.5"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+haki-data = "haki_data.__main__:main"
