@@ -31,8 +31,6 @@ def transform_data(df: pd.DataFrame) -> pd.DataFrame:
     df = add_date(df.copy(), ['next_dd', 'next_mon','next_yyyy'], 'next_date')
     df = add_case_number(df, 'court', 'caseid_type', 'caseid_no', 'filed_yyyy')
     df = add_case_age(df)
-
-
     df = add_case_nature(df, CRIMINAL_CASES)
     df = add_conclusion(df, RESOLVED_OUTCOMES)
     df = add_registration(df)

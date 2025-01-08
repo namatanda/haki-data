@@ -4,7 +4,7 @@ import numpy as np
 from typing import Dict, Any, List, Union, Optional
 import logging
 from . logging_config import logger
-
+from . constants import *
 
 def add_case_age(df: pd.DataFrame, filed_date_column: str = 'filed_date', activity_date_column: str = 'activity_date', age_column: str = 'case_age') -> pd.DataFrame:
     """
@@ -348,6 +348,26 @@ def calculate_adjournment_proportion(df: pd.DataFrame, non_adjournable: list[str
 
     # 1. Create 'adjourned' column (1 if 'reason_adj' is not null and 'comingfor' is not in non_adjournable, else 0)
     df['adjourned'] = (df['reason_adj'].notnull() & df['comingfor'].apply(lambda x: x not in non_adjournable)).astype(int)
+
+        # 2. Create 'adjournable' column (1 if 'comingfor' is not in non_adjournable, else 0)
+    df['adjournable'] = df['comingfor'].apply(lambda x: x not in non_adjournable).astype(int)
+
+    # 3. Calculate adjourned events per court and reason_adj
+    adjourned_per_court_reason = df.groupby(['court', 'reason_adj'])['adjourned'].sum().reset_index(name='count')
+
+    # 4. Sum adjourned and adjournable events per court
+    adjourned = df.groupby('court')['adjourned'].sum().reset_index(name='total_adjourned')
+    adjournable = df.groupby('court')['adjournable'].sum().reset_index(name='total_adjournable')
+
+    # 5. Calculate the adjournment proportion per court
+    adjourn_proportion = pd.merge(adjourned, adjournable, on='court')
+    adjourn_proportion['adjourn_proportion'] = (adjourn_proportion['total_adjourned'] / adjourn_proportion['total_adjournable']) * 100
+
+    return adjourn_proportion
+
+
+
+
 def get_monthly_case_stats(df, registered_col, concluded_col):
     """Calculates monthly statistics for registered and concluded cases.
 
@@ -366,21 +386,6 @@ def get_monthly_case_stats(df, registered_col, concluded_col):
     ).reset_index()
 
     return monthly_cases
-    # 2. Create 'adjournable' column (1 if 'comingfor' is not in non_adjournable, else 0)
-    df['adjournable'] = df['comingfor'].apply(lambda x: x not in non_adjournable).astype(int)
-
-    # 3. Calculate adjourned events per court and reason_adj
-    adjourned_per_court_reason = df.groupby(['court', 'reason_adj'])['adjourned'].sum().reset_index(name='count')
-
-    # 4. Sum adjourned and adjournable events per court
-    adjourned = df.groupby('court')['adjourned'].sum().reset_index(name='total_adjourned')
-    adjournable = df.groupby('court')['adjournable'].sum().reset_index(name='total_adjournable')
-
-    # 5. Calculate the adjournment proportion per court
-    adjourn_proportion = pd.merge(adjourned, adjournable, on='court')
-    adjourn_proportion['adjourn_proportion'] = (adjourn_proportion['total_adjourned'] / adjourn_proportion['total_adjournable']) * 100
-
-    return adjourn_proportion
 
 def get_monthly_case_stats(df, registered_col, concluded_col):
     """Calculates monthly statistics for registered and concluded cases.
@@ -439,3 +444,4 @@ def get_quarterly_stats(df: pd.DataFrame) -> pd.DataFrame:
     )
     
     return quarterly_stats
+

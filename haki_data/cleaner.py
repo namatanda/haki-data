@@ -150,12 +150,13 @@ def convert_to_title_case(df: pd.DataFrame, column: str) -> pd.DataFrame:
     # Apply the title case function to the column
     df[column] = df[column].apply(lambda x: apply_title_case(x, column))
 
-    new_null_count = df[column].isnull().sum()
-    if new_null_count > original_null_count:
-        logger.warning(f"Number of null values in '{column}' increased from {original_null_count} to {new_null_count}")
-
-    non_string_count = df[column].apply(lambda x: not isinstance(x, str) if pd.notna(x) else False).sum()
-    if non_string_count > 0:
-        logger.warning(f"Found {non_string_count} non-string values in '{column}' after processing")
 
     return df
+
+    # new_null_count = df[column].isnull().sum()
+    # if new_null_count > original_null_count:
+    #     logger.warning(f"Number of null values in '{column}' increased from {original_null_count} to {new_null_count}")
+
+    # non_string_count = df[column].apply(lambda x: not isinstance(x, str) if pd.notna(x) else False).sum()
+    # if non_string_count > 0:
+    #     logger.warning(f"Found {non_string_count} non-string values in '{column}' after processing")
