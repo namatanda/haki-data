@@ -4,3 +4,4 @@ __pycache__/*
 *.pyc 
 .venv/
 .mypy_cache/
+notebooks/extractor/.ipynb_checkpoints/tribunal_api_data_processor-checkpoint.ipynb
