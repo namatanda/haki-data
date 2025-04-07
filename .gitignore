@@ -1,8 +1,13 @@
 
 data/*
 __pycache__/*
-*.pyc 
+*.pyc
 .venv/
 .mypy_cache/
 .ipynb_checkpoints/
 *.csv
+.venv
+*.bar_chart.png
+*.ipynb:Zone.Identifier
+*.png
+*.html
