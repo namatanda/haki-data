@@ -20,7 +20,7 @@ Haki Data is a Python tool for processing and analyzing court case data. It prov
    ```
 3. Clone the repository:
    ```
-   git clone https://github.com/yourusername/haki-data.git
+   git clone https://github.com/namatanda/haki-data.git
    cd haki-data
    ```
 4. Install the dependencies using Poetry:
